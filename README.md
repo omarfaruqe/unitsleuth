@@ -60,3 +60,9 @@ natural variation is wide compared with the conversion factor.
 uv sync
 uv run pytest
 ```
+
+## Validation
+
+- **Negative control (real data):** on the Palmer penguins dataset (342 birds, 4 numeric columns, 24 catalog conversions each), nothing was flagged: 0 of 96 tests, despite three species with different body sizes.
+- **Positive control (semi-real):** converting a known 5%, 15% or 30% of the penguins' body mass (kg to lb) and bill length (cm to in) and running `detect_rows` over 3 random seeds each, the injected rows were found with 100% row accuracy in all 9 runs, and the estimated share was close to the injected share.
+- **Limits:** these results are for well-separated unit pairs. When the natural spread of a column is wide relative to the conversion factor, the units cannot be told apart from the numbers alone, and the evidence score will say so.
