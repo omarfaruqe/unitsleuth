@@ -56,7 +56,9 @@ class UnivariateFit:
         return f"{self.conversion.to_unit}->{self.conversion.from_unit}"
 
 
-def _normal_logpdf(t: FloatArray, mu: float, sigma: float) -> FloatArray:
+def _normal_logpdf(
+    t: FloatArray, mu: FloatArray | float, sigma: FloatArray | float
+) -> FloatArray:
     z = (t - mu) / sigma
     return np.asarray(-0.5 * z * z - np.log(sigma) - 0.5 * _LOG_2PI, dtype=np.float64)
 

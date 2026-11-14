@@ -3,7 +3,17 @@
 from unitsleuth import catalog
 from unitsleuth.catalog import Conversion
 from unitsleuth.detect import UnivariateFit, detect, fit_conversion
+from unitsleuth.multivariate import RowFit, detect_rows, repair
 
 __version__ = "0.1.0"
 
-__all__ = ["Conversion", "UnivariateFit", "catalog", "detect", "fit_conversion"]
+__all__ = [
+    "Conversion",
+    "RowFit",
+    "UnivariateFit",
+    "catalog",
+    "detect",
+    "detect_rows",
+    "fit_conversion",
+    "repair",
+]

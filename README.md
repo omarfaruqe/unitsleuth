@@ -23,10 +23,23 @@ print(best.label, best.weight, best.detected)
 rows = best.converted  # boolean mask of rows likely in the other unit
 ```
 
+### Whole rows in the wrong unit
+
+When a record was entered in one unit system, every column in that row is
+affected. `detect_rows` shares one flag per row across columns, and `repair`
+harmonises the data:
+
+```python
+cat = us.catalog
+fit = us.detect_rows(df_columns, {"height": cat.get("cm", "in"), "weight": cat.get("kg", "lb")})
+print(fit.summary())
+fixed = us.repair(df_columns, fit)  # dict of corrected arrays
+```
+
 ## Status
 
-Alpha. Univariate detection works; row-consistent multivariate detection, repair
-and dataframe integration are planned. Detection needs the units to be
+Alpha. Univariate and row-consistent multivariate detection and repair work;
+dataframe integration (pandas, Polars) and a CLI are planned. Detection needs the units to be
 separated relative to the spread of the data, so it cannot distinguish them when
 natural variation is wide compared with the conversion factor.
 
