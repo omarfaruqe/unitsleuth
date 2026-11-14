@@ -20,6 +20,9 @@ dependencies = [
     "scipy>=1.10",
 ]
 
+[project.scripts]
+unitsleuth = "unitsleuth.cli:main"
+
 [project.urls]
 Homepage = "https://github.com/omarfaruqe/unitsleuth"
 Issues = "https://github.com/omarfaruqe/unitsleuth/issues"

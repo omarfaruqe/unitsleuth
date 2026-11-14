@@ -37,6 +37,16 @@ print(fit.summary())
 fixed = us.repair(df, fit)  # same dataframe type, columns corrected
 ```
 
+### Command line
+
+```
+unitsleuth data.csv --col height:cm,in --col weight:kg,lb --out data_fixed.csv
+```
+
+Prints the report and, with `--out`, writes a harmonised CSV. The exit code is 1
+when mixed units are detected, 0 when not and 2 on usage errors, so it can gate a
+data pipeline.
+
 ## Status
 
 Alpha. Univariate and row-consistent multivariate detection and repair work;
