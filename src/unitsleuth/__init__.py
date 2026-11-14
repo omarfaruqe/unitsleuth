@@ -5,7 +5,7 @@ from unitsleuth.catalog import Conversion
 from unitsleuth.detect import UnivariateFit, detect, fit_conversion
 from unitsleuth.multivariate import RowFit, detect_rows, repair
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 __all__ = [
     "Conversion",

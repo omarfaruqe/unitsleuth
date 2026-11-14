@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "unitsleuth: detect mixed measurement units in unlabeled numeric columns"
 type: software
-version: 0.1.0
+version: 0.1.2
 date-released: 2026-11-14
 license: MIT
 repository-code: "https://github.com/omarfaruqe/unitsleuth"
