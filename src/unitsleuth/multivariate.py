@@ -195,7 +195,7 @@ def detect_rows(
     )
 
     a, b = logpost(w, mu, sig)
-    post = 1.0 / (1.0 + np.exp(a - b))
+    post = 1.0 / (1.0 + np.exp(np.clip(a - b, -700, 700)))
     post[~row_obs] = np.nan
     return RowFit(
         columns=cols,

@@ -193,7 +193,7 @@ def fit_conversion(
 
     la = np.log1p(-w) + _normal_logpdf(t, mu, sigma)
     lb = np.log(w) + _normal_logpdf((t - shift) / mult, mu, sigma) + jac
-    r = 1.0 / (1.0 + np.exp(la - lb))
+    r = 1.0 / (1.0 + np.exp(np.clip(la - lb, -700, 700)))
     post = np.full(arr.shape, np.nan)
     post[ok] = r
     return UnivariateFit(
