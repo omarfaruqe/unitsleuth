@@ -10,11 +10,12 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
+from unitsleuth._frame import columns_of, is_frame, replace_columns
 from unitsleuth.catalog import Conversion
 from unitsleuth.detect import Scale, _normal_logpdf
 
@@ -77,7 +78,7 @@ def _to_arrays(data: Mapping[str, ArrayLike]) -> dict[str, FloatArray]:
 
 
 def detect_rows(
-    data: Mapping[str, ArrayLike],
+    data: Any,
     conversions: Mapping[str, Conversion],
     *,
     min_delta_bic: float = 10.0,
@@ -93,12 +94,12 @@ def detect_rows(
     be the majority.
     """
     cols = tuple(conversions)
-    missing = [c for c in cols if c not in data]
-    if missing:
-        raise KeyError(f"columns not in data: {missing}")
     if not cols:
         raise ValueError("conversions is empty")
-    arrays = _to_arrays({c: data[c] for c in cols})
+    missing = [c for c in cols if isinstance(data, Mapping) and c not in data]
+    if missing:
+        raise KeyError(f"columns not in data: {missing}")
+    arrays = _to_arrays(columns_of(data, cols))
     raw = np.column_stack([arrays[c] for c in cols])
     mask = np.isfinite(raw)
     row_obs = mask.any(axis=1)
@@ -212,20 +213,22 @@ def detect_rows(
 
 
 def repair(
-    data: Mapping[str, ArrayLike],
+    data: Any,
     fit: RowFit,
     *,
     threshold: float = 0.5,
     target: Target = "majority",
-) -> dict[str, FloatArray]:
+) -> Any:
     """Return copies of the fitted columns harmonised to a single unit.
 
     ``target="base"`` converts flagged rows back to the base unit,
     ``"converted"`` converts unflagged rows forward, and ``"majority"`` (default)
     picks whichever unit most rows are already in. Rows with an undefined
-    posterior are left untouched.
+    posterior are left untouched. For a dataframe input the result is a
+    dataframe of the same type with the fitted columns replaced; for a mapping
+    it is a dict of arrays.
     """
-    arrays = _to_arrays({c: data[c] for c in fit.columns})
+    arrays = _to_arrays(columns_of(data, fit.columns))
     post = fit.posterior
     with np.errstate(invalid="ignore"):
         flagged = post > threshold
@@ -241,4 +244,4 @@ def repair(
         else:
             x[unflagged] = conv.forward(x[unflagged])
         out[c] = x
-    return out
+    return replace_columns(data, out) if is_frame(data) else out

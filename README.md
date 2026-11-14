@@ -27,13 +27,14 @@ rows = best.converted  # boolean mask of rows likely in the other unit
 
 When a record was entered in one unit system, every column in that row is
 affected. `detect_rows` shares one flag per row across columns, and `repair`
-harmonises the data:
+harmonises the data. `df` can be a pandas or Polars DataFrame (via
+[Narwhals](https://narwhals-dev.github.io/narwhals/)) or a dict of arrays:
 
 ```python
 cat = us.catalog
-fit = us.detect_rows(df_columns, {"height": cat.get("cm", "in"), "weight": cat.get("kg", "lb")})
+fit = us.detect_rows(df, {"height": cat.get("cm", "in"), "weight": cat.get("kg", "lb")})
 print(fit.summary())
-fixed = us.repair(df_columns, fit)  # dict of corrected arrays
+fixed = us.repair(df, fit)  # same dataframe type, columns corrected
 ```
 
 ## Status
